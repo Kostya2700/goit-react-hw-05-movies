@@ -1,4 +1,5 @@
 import { fetchCast } from 'Api/api';
+import { imgPicture } from 'Image/Image';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -10,15 +11,10 @@ const Cast = () => {
       setCast(resp);
     });
   }, [id]);
-  const imgPicture = path => {
-    if (path === null) {
-      return `${`https://via.placeholder.com/960x240`}`;
-    }
 
-    return `https://image.tmdb.org/t/p/w300${path}`;
-  };
   return (
     <ul className="castsList">
+      {cast.length === 0 && <h3>No cast</h3>}
       {cast &&
         cast.map(({ cast_id, character, original_name, profile_path }) => {
           return (
@@ -34,7 +30,6 @@ const Cast = () => {
             </li>
           );
         })}
-      {cast.length === 0 && <h3>No cast</h3>}
     </ul>
   );
 };

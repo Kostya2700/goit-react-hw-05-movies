@@ -1,4 +1,5 @@
 import { fetchMovieId } from 'Api/api';
+import { imgPicture } from 'Image/Image';
 import { useEffect, useState } from 'react';
 import {
   Link,
@@ -18,19 +19,10 @@ const MovieDetails = () => {
       setMovie(resp);
     });
   }, [id]);
-  const imgPicture = path => {
-    if (path === undefined) {
-      return;
-    }
-    if (path === null) {
-      return `${`https://via.placeholder.com/960x240`}`;
-    }
 
-    return `https://image.tmdb.org/t/p/w300${path}`;
-  };
-  const genres = arr => {
-    if (arr === null) return;
-    return arr?.map(genre => genre.name).join(', ');
+  const genres = arrGenres => {
+    if (arrGenres === null) return;
+    return arrGenres?.map(genre => genre.name).join(', ');
   };
   const useScore = value => {
     return String(value).slice(0, 3);

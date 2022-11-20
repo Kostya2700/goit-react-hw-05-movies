@@ -8,37 +8,47 @@ const Movies = () => {
   const location = useLocation();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const name = searchParams.get('name');
+  const nameMovies = searchParams.get('search');
   // console.log('Movies ~ names', name);
   useEffect(() => {
-    if (name === '' || name === null) return;
-    searchMovieName(name).then(resp => {
-      // console.log(resp);
-      if (resp.length === 0) return console.log('Film not defined');
-      setMovies([...resp]);
-    });
-  }, [name]);
+    if (nameMovies === '' || nameMovies === null) return;
+    const asyncSearchMovies = async () => {
+      try {
+        const respMovies = await searchMovieName(nameMovies);
+        if (respMovies.length === 0) return console.log('Film not defined');
+        return setMovies(p => [...respMovies]);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    asyncSearchMovies();
+  }, [nameMovies]);
 
   const handleSearch = e => {
     setSearch(e.currentTarget.value.toLowerCase());
-    const name = e.target.value;
-    const nextParams = name !== '' ? { name } : {};
-    setSearchParams(nextParams);
+    // const name = e.target.value;
+    // const nextParams = name !== '' ? { search } : {};
+    // setSearchParams(nextParams);
   };
 
   const changeSubmit = e => {
     e.preventDefault();
     setSearch('');
     if (search.trim() === '') return;
-    searchMovieName(search)
-      .then(res => {
-        if (res.length === 0) {
+    const onSearchMovies = async () => {
+      try {
+        const response = await searchMovieName(search);
+        if (response.length === 0) {
           console.log('no');
           return;
         }
-        setMovies([...res]);
-      })
-      .catch(e => console.log(e));
+        setMovies([...response]);
+      } catch (error) {
+        console.log('onSearchMovies ~ error', error);
+      }
+    };
+    onSearchMovies();
+    setSearchParams({ search: search });
   };
 
   return (
@@ -52,6 +62,7 @@ const Movies = () => {
             value={search}
           />
         </label>
+        <button type="submit">Search</button>
       </form>
       <ul>
         {movie?.map(({ id, name, title }) => {

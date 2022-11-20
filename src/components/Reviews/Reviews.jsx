@@ -14,6 +14,7 @@ const Reviews = () => {
   }, [id]);
   return (
     <ul>
+      {reviews.length === 0 && <h3>No reviews</h3>}
       {reviews &&
         reviews.map(({ author, id, content }) => {
           return (
@@ -23,7 +24,6 @@ const Reviews = () => {
             </li>
           );
         })}
-      {reviews.length === 0 && <h3>No reviews</h3>}
     </ul>
   );
 };
