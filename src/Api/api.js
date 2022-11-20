@@ -15,7 +15,19 @@ export const fetchMovieId = async id => {
 };
 export const fetchCast = async id => {
   const response = await axios.get(
-    `https://api.themoviedb.org/3/movie/${id}/credits??api_key=${keyUrl}&language=en-US`
+    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${keyUrl}&language=en-US`
   );
-  return response;
+  return response.data.cast;
+};
+export const fetchReviews = async id => {
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${keyUrl}&language=en-US&page=1`
+  );
+  return response.data.results;
+};
+export const searchMovieName = async query => {
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${keyUrl}&language=en-US&page=1&include_adult=false`
+  );
+  return response.data.results;
 };
