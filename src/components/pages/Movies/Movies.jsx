@@ -17,7 +17,7 @@ const Movies = () => {
       if (resp.length === 0) return console.log('Film not defined');
       setMovies([...resp]);
     });
-  }, []);
+  }, [name]);
 
   const handleSearch = e => {
     setSearch(e.currentTarget.value.toLowerCase());
