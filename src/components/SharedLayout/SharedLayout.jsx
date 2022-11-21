@@ -7,6 +7,7 @@ const SharedLayout = () => {
       <nav>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/movies">Movies</NavLink>
+        <NavLink to="/savemovies">SaveMovies</NavLink>
       </nav>
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />

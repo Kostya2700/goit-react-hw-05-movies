@@ -1,4 +1,5 @@
 import { fetchMovieId } from 'Api/api';
+import { toast } from 'react-toastify';
 import { imgPicture } from 'Image/Image';
 import { useEffect, useState } from 'react';
 import {
@@ -13,6 +14,8 @@ const MovieDetails = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const WATCH_KEY = 'movie';
+  let arrWatch = [];
 
   useEffect(() => {
     fetchMovieId(id).then(resp => {
@@ -32,6 +35,30 @@ const MovieDetails = () => {
     const back = location?.state?.from ?? '/';
     return navigate(back);
   };
+
+  const saveToLocal = obj => {
+    const checkWatch = localStorage.getItem(WATCH_KEY);
+    if (checkWatch) {
+      arrWatch = JSON.parse(checkWatch);
+    }
+
+    const filmWatch = arrWatch.find(array => array.id === obj.id);
+
+    if (filmWatch) {
+      return toast.warn('You save this film');
+    }
+    arrWatch.push(obj);
+    window.localStorage.setItem(WATCH_KEY, JSON.stringify(arrWatch));
+    return arrWatch;
+  };
+  const deleteLocal = obj => {
+    const checkWatch = localStorage.getItem(WATCH_KEY);
+    const deleteStorage = JSON.parse(checkWatch);
+    const filmWatched = deleteStorage.filter(array => {
+      return array.id !== obj.id;
+    });
+    localStorage.setItem(WATCH_KEY, JSON.stringify(filmWatched));
+  };
   return (
     <div>
       <div>
@@ -50,6 +77,22 @@ const MovieDetails = () => {
           <p>
             <b>Genres</b> : {genres(movie.genres)}
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              saveToLocal(movie);
+            }}
+          >
+            Save Films
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              deleteLocal(movie);
+            }}
+          >
+            Delete Films
+          </button>
         </div>
       </div>
       <ul>
